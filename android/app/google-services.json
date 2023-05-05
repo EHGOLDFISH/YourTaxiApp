@@ -1,0 +1,97 @@
+{
+  "project_info": {
+    "project_number": "1067697555775",
+    "project_id": "your-taxi-dispatcher",
+    "storage_bucket": "your-taxi-dispatcher.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067697555775:android:c8e76fe31f811ba6ddab8a",
+        "android_client_info": {
+          "package_name": "ca.agoldfish.fluttertogooglesheets"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1067697555775-gndk5o66efmoq6on7n8sh7b87lbi2b2n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCZVtyR-gnl8oUhPr6nf4U2UR35vPYLcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1067697555775-gndk5o66efmoq6on7n8sh7b87lbi2b2n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067697555775:android:47c16184645a42e2ddab8a",
+        "android_client_info": {
+          "package_name": "ca.agoldfish.your_taxi_dispatcher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1067697555775-gndk5o66efmoq6on7n8sh7b87lbi2b2n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCZVtyR-gnl8oUhPr6nf4U2UR35vPYLcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1067697555775-gndk5o66efmoq6on7n8sh7b87lbi2b2n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067697555775:android:fc1ddf6575c85053ddab8a",
+        "android_client_info": {
+          "package_name": "ca.agoldfish.yourtaxidispatch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1067697555775-gndk5o66efmoq6on7n8sh7b87lbi2b2n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCZVtyR-gnl8oUhPr6nf4U2UR35vPYLcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1067697555775-gndk5o66efmoq6on7n8sh7b87lbi2b2n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
