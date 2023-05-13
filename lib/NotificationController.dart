@@ -35,7 +35,7 @@ class NotificationController {
   static Future <void> onActionReceivedMethod(ReceivedAction receivedAction) async {
     // Your code goes here
 
-    Dispatch dispatch = Dispatch.fromJson(receivedAction.payload);
+    Dispatch dispatch = Dispatch.fromPayloadJson(receivedAction.payload!);
     UserSheetsApi.updateTenFourDispatch(dispatch.callLine);
     // Navigate into pages, avoiding to open the notification details page over another details page already opened
     MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil('/notification-page',

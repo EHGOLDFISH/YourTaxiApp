@@ -7,10 +7,12 @@ import 'package:your_taxi_dispatcher/AddFCMPage.dart';
 import 'package:your_taxi_dispatcher/NotificationController.dart';
 import 'package:your_taxi_dispatcher/api/sheets/user_sheets_api.dart';
 import 'package:your_taxi_dispatcher/screens/CompletedDispatchPage.dart';
-import 'package:your_taxi_dispatcher/screens/DispatchPage.dart';
+import 'package:your_taxi_dispatcher/screens/DispatchHistoryPage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:your_taxi_dispatcher/screens/DispatchInfoPage.dart';
+import 'package:your_taxi_dispatcher/screens/NotificationPage.dart';
 import 'package:your_taxi_dispatcher/theme/colors.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 //
 // @pragma('vm:entry-point')
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -164,6 +166,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+
   @override
   initState() {
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) => {
@@ -187,31 +192,32 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      backgroundColor: primary,
-      appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Image.asset('assets/yourtaxi.png',height: 75,width: 150,),
-        ),
-      ),
-      body:
-      //  AddFCMPage(fcmToken)
-      Center(
-        child: SafeArea(
-          child: Center(
-            child: Container(
-              width: 500.0,
-              height: 200.0,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Text("Waiting for dispatch"),
-              ),
-            ),
-          ),
-        ),
-      ),
-        //CompletedDispatchPage(19)
-    );
+    return DispatchHistoryPage();
+    //   Scaffold(
+    //   backgroundColor: primary,
+    //   appBar: AppBar(
+    //     title: Padding(
+    //       padding: const EdgeInsets.all(16.0),
+    //       child: Image.asset('assets/yourtaxi.png',height: 75,width: 150,),
+    //     ),
+    //   ),
+    //   body:
+    //   //  AddFCMPage(fcmToken)
+    //   Center(
+    //     child: SafeArea(
+    //       child: Center(
+    //         child: Container(
+    //           width: 500.0,
+    //           height: 200.0,
+    //           child: FittedBox(
+    //             fit: BoxFit.contain,
+    //             child: Text("Waiting for dispatch"),
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    //     //CompletedDispatchPage(19)
+    // );
   }
 }

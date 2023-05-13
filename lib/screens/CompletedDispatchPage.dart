@@ -6,7 +6,7 @@ import '../api/sheets/user_sheets_api.dart';
 import '../theme/colors.dart';
 import '../widget/button_widget.dart';
 
-const List<String> list = <String>['Cash', 'Debit', 'BLUE', 'CANCEL', 'N/F'];
+const List<String> list = <String>['Cash', 'Debit', 'BLUE'];
 String dropdown = 'Cash';
 final TextEditingController amountController = TextEditingController();
 
@@ -97,6 +97,7 @@ class CompletedDispatchPage extends StatelessWidget {
                                             keyboardType:
                                                 TextInputType.number,
                                             inputFormatters: <TextInputFormatter>[CurrencyTextInputFormatter(
+                                              decimalDigits: 1,
                                               locale: 'en',
                                               symbol: 'CAD \$',
                                             )],
