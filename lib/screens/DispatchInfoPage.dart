@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:your_taxi_dispatcher/data/dispatch.dart';
-import 'package:maps_launcher/maps_launcher.dart';
 
-import '../theme/colors.dart';
 import '../widget/button_widget.dart';
 import '../widget/custom_card.dart';
 import 'CompletedDispatchPage.dart';
@@ -15,8 +12,6 @@ class DispatchInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
