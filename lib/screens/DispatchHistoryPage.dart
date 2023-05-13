@@ -65,7 +65,9 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
               child: CustomDisplayCard(
                   title: _dispatch[index].callLine.toString(),
                   subtitle: _dispatch[index].pickUp!,
-                  icon: Icons.check));
+                  icon: Icons.check,
+                color: Colors.green,
+              ));
           //   Card(
           //   elevation: 2,
           //   shape: RoundedRectangleBorder(

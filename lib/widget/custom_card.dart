@@ -9,12 +9,12 @@ class CustomDisplayCard extends StatelessWidget {
     required String this.subtitle,
     required IconData this.icon,
     this.onClicked,
-    Colors? this.color});
+    this.color});
 
   String title;
   String subtitle;
   IconData icon = Icons.dangerous;
-  Colors? color;
+  Color? color = Colors.black;
   final VoidCallback? onClicked;
 
   @override
@@ -54,7 +54,7 @@ class CustomDisplayCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15),
                         // shape: BoxShape.circle
                       ),
-                      child: Center(child: Icon(icon)),
+                      child: Center(child: Icon(icon,color: color,)),
                     ),
                     SizedBox(
                       width: 15,
@@ -147,7 +147,7 @@ class CustomDisplayCard extends StatelessWidget {
               ],
             ),
           ),
-          _buildButtonColumn(Colors.black, Icons.near_me, 'ROUTE', address)
+          _buildButtonColumn(color!, Icons.near_me, 'ROUTE', address)
         ],
       ),
     );
