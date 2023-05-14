@@ -55,6 +55,17 @@ class DispatchInfoPage extends StatelessWidget {
                   title:'Call Type',
                   subtitle: dispatch.callType!,
                   icon: Icons.call),
+            if (stringNullCheck(dispatch.paymentType))
+              CustomDisplayCard(
+                  title:'Payment Type',
+                  subtitle: dispatch.paymentType!,
+                  icon: Icons.payment),
+            if (stringNullCheck(dispatch.fare.toString()))
+              CustomDisplayCard(
+                  title:'Payment Amount',
+                  subtitle: dispatch.fare!.toString(),
+                  icon: Icons.payments_outlined),
+            if(!stringNullCheck(dispatch.fare.toString()))
             Padding(
               padding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 8.0),
               child: ButtonWidget(
