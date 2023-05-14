@@ -20,15 +20,26 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
     return dispatchFromJson(testData);
   }
 
-  //TODO: create a list of dispatches -
-  //TODO: display a list of dispatches -
-  //TODO: De couple dispatch page from notification make dispatch page info
-  //TODO: make it pretty
-  //TODO: add a not completed yet
-  //TODO: click on one list item
-  //TODO: Pull a list of dispatches from shared pref
-  //TODO: remove time > 24 hrs current time based on time
+  //TODO: add a not completed yet logic if payment == null
+  //TODO: remove complete and display amount
+  //TODO: add button logic to go to history
+  //TODO: add icon with badge
+
   //TODO: save prefs
+  //TODO: add to shared pref
+  //TODO: add clear shared pref
+  //TODO: remove time > 24 hrs current time based on time
+  //TODO: Pull a list of dispatches from shared pref
+
+  //TODO: hook up new google sheets
+
+  //TODO: FCM page
+  //TODO: Create one time push to sheets
+  //TODO: Save to shared pref and send to sheets
+
+  //TODO: Code refactoring
+
+  //TODO: test on device
 
   @override
   void initState() {
@@ -62,37 +73,28 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
                       builder: (context) => DispatchInfoPage(_dispatch[index])),
                 );
               },
-              child: CustomDisplayCard(
-                  title: _dispatch[index].callLine.toString(),
-                  subtitle: _dispatch[index].pickUp!,
-                  icon: Icons.check,
-                color: Colors.green,
-              ));
-          //   Card(
-          //   elevation: 2,
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(8),
-          //   ),
-          //   child: InkWell(
-          //       borderRadius: BorderRadius.circular(8),
-          //       onTap: (){
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //               builder: (context) => DispatchInfoPage(_dispatch[index])),
-          //         );
-          //       },
-          //     child: Column(
-          //       children: [
-          //         Text(_dispatch[index].callLine.toString()),
-          //         Text(_dispatch[index].pickUp.toString())
-          //       ],
-          //     ),
-          //   ),
-          // );
+              child: displayCardHistory(_dispatch[index]));
         },
         itemCount: _dispatch.length,
       ),
+    );
+  }
+}
+
+Widget displayCardHistory(Dispatch dispatch) {
+  if (dispatch.paymentType == null || dispatch.paymentType == '') {
+    return CustomDisplayCard(
+      title: dispatch.callLine.toString(),
+      subtitle: dispatch.pickUp!,
+      icon: Icons.add_circle,
+      color: Colors.orange,
+    );
+  } else {
+    return CustomDisplayCard(
+      title: dispatch.callLine.toString(),
+      subtitle: dispatch.pickUp!,
+      icon: Icons.check,
+      color: Colors.green,
     );
   }
 }
