@@ -20,7 +20,6 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
     return dispatchFromJson(testData);
   }
 
-  //TODO: add a not completed yet logic if payment == null
   //TODO: remove complete and display amount
   //TODO: add button logic to go to history
   //TODO: add icon with badge
@@ -86,7 +85,7 @@ Widget displayCardHistory(Dispatch dispatch) {
     return CustomDisplayCard(
       title: dispatch.callLine.toString(),
       subtitle: dispatch.pickUp!,
-      icon: Icons.add_circle,
+      icon: Icons.access_time_outlined,
       color: Colors.orange,
     );
   } else {
