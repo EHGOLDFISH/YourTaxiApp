@@ -60,12 +60,12 @@ class DispatchInfoPage extends StatelessWidget {
                   title:'Payment Type',
                   subtitle: dispatch.paymentType!,
                   icon: Icons.payment),
-            if (stringNullCheck(dispatch.fare.toString()))
+            if (doubleNullCheck(dispatch.fare))
               CustomDisplayCard(
                   title:'Payment Amount',
                   subtitle: dispatch.fare!.toString(),
                   icon: Icons.payments_outlined),
-            if(!stringNullCheck(dispatch.fare.toString()))
+            if(!stringNullCheck(dispatch.paymentType))
             Padding(
               padding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 8.0),
               child: ButtonWidget(
@@ -88,3 +88,4 @@ class DispatchInfoPage extends StatelessWidget {
 }
 
 bool stringNullCheck(String? value)=>(value != null && value != "");
+bool doubleNullCheck(double? value)=>(value != null && value != 0.0);
