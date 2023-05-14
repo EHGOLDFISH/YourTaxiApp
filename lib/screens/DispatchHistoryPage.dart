@@ -53,7 +53,6 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
@@ -83,14 +82,14 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
 Widget displayCardHistory(Dispatch dispatch) {
   if (dispatch.paymentType == null || dispatch.paymentType == '') {
     return CustomDisplayCard(
-      title: dispatch.callLine.toString(),
+      title: "Call Line ID: "+dispatch.callLine.toString(),
       subtitle: dispatch.pickUp!,
       icon: Icons.access_time_outlined,
       color: Colors.orange,
     );
   } else {
     return CustomDisplayCard(
-      title: dispatch.callLine.toString(),
+      title: "Call Line ID: "+dispatch.callLine.toString(),
       subtitle: dispatch.pickUp!,
       icon: Icons.check,
       color: Colors.green,
