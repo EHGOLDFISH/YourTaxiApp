@@ -1,19 +1,25 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 import '../api/sheets/user_sheets_api.dart';
+import '../data/dispatch.dart';
+import '../data/dispatch_list.dart';
 import '../theme/colors.dart';
 import '../widget/button_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 const List<String> list = <String>['Cash', 'Debit', 'BLUE'];
 String dropdown = 'Cash';
 final TextEditingController amountController = TextEditingController();
 
 class CompletedDispatchPage extends StatelessWidget {
-  int? callLine;
+  Dispatch dispatch;
 
-  CompletedDispatchPage(this.callLine);
+  CompletedDispatchPage(this.dispatch);
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +142,7 @@ class CompletedDispatchPage extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: ButtonWidget(
                 text: 'Submit',
-                onClicked: () {
+                onClicked: () async{
                   try{
 
                     //get dropdown value  = dropdown
@@ -152,8 +158,18 @@ class CompletedDispatchPage extends StatelessWidget {
                       // };
 
                       //print('sending values to sheets');
+                      //update dispatch
+                      dispatch.paymentType = dropdown;
+                      dispatch.fare = double.parse(amountWithoutDollarSign);
+                      dispatch.submittedTime = DateTime.now().toString();
+                      DispatchList.dispatchList[DispatchList.dispatchList.indexWhere((element) => element.callLine == dispatch.callLine)] = dispatch;
+
+                      //update shared pref
+                      final SharedPreferences prefs = await SharedPreferences.getInstance();
+                      String dispatchListJson = json.encode(DispatchList.dispatchList);
+                      await prefs.setString('DispatchData', dispatchListJson);
                       //send key here
-                      UserSheetsApi.updateDispatch( callLine!,dropdown, amountWithoutDollarSign);
+                      UserSheetsApi.updateDispatch( dispatch.callLine,dropdown, amountWithoutDollarSign);
                       Navigator.pushNamedAndRemoveUntil(
                           context,
                           "/", (r) => false);

@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:your_taxi_dispatcher/data/dispatch.dart';
+import 'package:your_taxi_dispatcher/data/dispatch_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../widget/button_widget.dart';
 import '../widget/custom_card.dart';
@@ -24,7 +29,7 @@ class DispatchInfoPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            if(stringNullCheck(dispatch.pickUp))
+            if (stringNullCheck(dispatch.pickUp))
               CustomDisplayCard(
                   title: 'Pick Up',
                   subtitle: dispatch.pickUp!,
@@ -32,54 +37,47 @@ class DispatchInfoPage extends StatelessWidget {
             //newDispatchSection('Pick Up',dispatch.pickUp,Icons.arrow_upward_rounded,size),
             if (stringNullCheck(dispatch.dest))
               CustomDisplayCard(
-                title:'Drop Off',
-                subtitle: dispatch.dest!,
-                icon: Icons.arrow_downward_rounded),
+                  title: 'Drop Off',
+                  subtitle: dispatch.dest!,
+                  icon: Icons.arrow_downward_rounded),
             if (stringNullCheck(dispatch.note))
               CustomDisplayCard(
-                  title:'Notes',
-                  subtitle: dispatch.note!,
-                  icon: Icons.notes),
+                  title: 'Notes', subtitle: dispatch.note!, icon: Icons.notes),
             if (stringNullCheck(dispatch.carType))
               CustomDisplayCard(
-                  title:'Vehicle Type',
+                  title: 'Vehicle Type',
                   subtitle: dispatch.carType!,
                   icon: Icons.drive_eta),
             if (stringNullCheck(dispatch.acct))
               CustomDisplayCard(
-                  title:'Account Number',
+                  title: 'Account Number',
                   subtitle: dispatch.acct!,
                   icon: Icons.account_box),
             if (stringNullCheck(dispatch.callType))
               CustomDisplayCard(
-                  title:'Call Type',
+                  title: 'Call Type',
                   subtitle: dispatch.callType!,
                   icon: Icons.call),
             if (stringNullCheck(dispatch.paymentType))
               CustomDisplayCard(
-                  title:'Payment Type',
+                  title: 'Payment Type',
                   subtitle: dispatch.paymentType!,
                   icon: Icons.payment),
             if (doubleNullCheck(dispatch.fare))
               CustomDisplayCard(
-                  title:'Payment Amount',
+                  title: 'Payment Amount',
                   subtitle: dispatch.fare!.toString(),
                   icon: Icons.payments_outlined),
-            if(!stringNullCheck(dispatch.paymentType))
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 8.0),
-              child: ButtonWidget(
-                text: 'Completed',
-                onClicked: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            CompletedDispatchPage(dispatch.callLine)),
-                  );
-                },
+            if (!stringNullCheck(dispatch.paymentType))
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 8.0),
+                child: ButtonWidget(
+                  text: 'Completed',
+                  onClicked: () async {
+                    completeDispatch(context, dispatch);
+                  },
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -87,5 +85,15 @@ class DispatchInfoPage extends StatelessWidget {
   }
 }
 
-bool stringNullCheck(String? value)=>(value != null && value != "");
-bool doubleNullCheck(double? value)=>(value != null && value != 0.0);
+bool stringNullCheck(String? value) => (value != null && value != "");
+
+bool doubleNullCheck(double? value) => (value != null && value != 0.0);
+
+Future<void> completeDispatch(BuildContext context, Dispatch dispatch) async {
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+        builder: (context) => CompletedDispatchPage(dispatch)),
+  );
+}

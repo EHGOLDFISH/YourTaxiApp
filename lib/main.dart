@@ -13,6 +13,9 @@ import 'package:your_taxi_dispatcher/screens/DispatchInfoPage.dart';
 import 'package:your_taxi_dispatcher/screens/NotificationPage.dart';
 import 'package:your_taxi_dispatcher/theme/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:badges/badges.dart' as badges;
+
+import 'data/dispatch_list.dart';
 //
 // @pragma('vm:entry-point')
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -32,12 +35,20 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 String fcmToken = '';
 
+late bool _showDispatchBadge;
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   fcmToken = await getFirebaseMessagingToken();
 
+  // final SharedPreferences prefs = await SharedPreferences.getInstance();
+  // //test if empty
+  // String dispatchDataJson = prefs.getString('DispatchData')!;
+  //
+  // return dispatchFromJson(testData);
 
   await UserSheetsApi.init();
 
@@ -51,53 +62,7 @@ void main() async {
     )
   ]);
 
-  //get token
-  // final fcmToken = await FirebaseMessaging.instance.getToken();
-
-  // get token from awesome
-  //var fcmToken = getFirebaseMessagingToken();
-
-  // const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  //   'high_importance_channel', // id
-  //   'High Importance Notifications', // title // description
-  //   importance: Importance.max,
-  // );
-  // await flutterLocalNotificationsPlugin
-  //     .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-  //     ?.createNotificationChannel(channel);
-
-  // FirebaseMessaging messaging = FirebaseMessaging.instance;
-  //
-  // NotificationSettings settings = await messaging.requestPermission(
-  //   alert: true,
-  //   announcement: false,
-  //   badge: true,
-  //   carPlay: false,
-  //   criticalAlert: false,
-  //   provisional: false,
-  //   sound: true,
-  // );
-  //
-  // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //   print('Got a message whilst in the foreground!');
-  //   print('Message data: ${message.data}');
-  //   String notNull;
-  //   RemoteNotification? notification = message.notification;
-  //   AndroidNotification? android = message.notification?.android;
-  //
-  //   // If `onMessage` is triggered with a notification, construct our own
-  //   // local notification to show to users using the created channel.
-  //   if (notification != null && android != null) {
-  //
-  //     var title = notification.title;
-  //     var body = notification.body;
-  //
-  //   }
-  // });
-
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  runApp(const MyApp());
+   runApp(const MyApp());
 }
 
 ReceivedAction? initialAction;
@@ -190,34 +155,62 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    _showDispatchBadge = DispatchList.counter > 0;
 
-    return DispatchHistoryPage();
-    //   Scaffold(
-    //   backgroundColor: primary,
-    //   appBar: AppBar(
-    //     title: Padding(
-    //       padding: const EdgeInsets.all(16.0),
-    //       child: Image.asset('assets/yourtaxi.png',height: 75,width: 150,),
-    //     ),
-    //   ),
-    //   body:
-    //   //  AddFCMPage(fcmToken)
-    //   Center(
-    //     child: SafeArea(
-    //       child: Center(
-    //         child: Container(
-    //           width: 500.0,
-    //           height: 200.0,
-    //           child: FittedBox(
-    //             fit: BoxFit.contain,
-    //             child: Text("Waiting for dispatch"),
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    //     //CompletedDispatchPage(19)
-    // );
+    return Scaffold(
+      backgroundColor: primary,
+      appBar: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Image.asset('assets/yourtaxi.png',height: 75,width: 150,),
+        ),
+        actions: <Widget>[
+          _dispatchInfoBadge(context),
+        ],
+      ),
+      body:
+      //  AddFCMPage(fcmToken)
+      Center(
+        child: SafeArea(
+          child: Center(
+            child: Container(
+              width: 500.0,
+              height: 200.0,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Text("Waiting for dispatch"),
+              ),
+            ),
+          ),
+        ),
+      ),
+        //CompletedDispatchPage(19)
+    );
   }
+}
+
+Widget _dispatchInfoBadge(BuildContext context) {
+  return badges.Badge(
+    position: badges.BadgePosition.topEnd(top: 0, end: 3),
+    badgeAnimation: badges.BadgeAnimation.slide(
+      // disappearanceFadeAnimationDuration: Duration(milliseconds: 200),
+      // curve: Curves.easeInCubic,
+    ),
+    showBadge: _showDispatchBadge,
+    badgeStyle: badges.BadgeStyle(
+      badgeColor: Colors.red,
+    ),
+    badgeContent: Text(
+      DispatchList.counter.toString(),
+      style: TextStyle(color: Colors.white),
+    ),
+    child: IconButton(icon: Icon(Icons.history_outlined), onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                DispatchHistoryPage()),
+      );
+    }),
+  );
 }

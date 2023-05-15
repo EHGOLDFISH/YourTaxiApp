@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:your_taxi_dispatcher/data/dispatch_list.dart';
 import 'package:your_taxi_dispatcher/screens/DispatchInfoPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../data/dispatch.dart';
 import '../widget/custom_card.dart';
@@ -13,20 +16,17 @@ class DispatchHistoryPage extends StatefulWidget {
 }
 
 class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
-  List<Dispatch> _dispatch = [];
+  //List<Dispatch> _dispatch = [];
 
-  Future<List<Dispatch>> readJson() async {
-    String testData = await rootBundle.loadString('assets/testData.json');
-    return dispatchFromJson(testData);
+  Future<List<Dispatch>> readJsonFromSharedPref() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String dispatchDataJson = prefs.getString('DispatchData')!;
+
+    //local test data
+    //String testData = await rootBundle.loadString('assets/testData.json');
+    return dispatchFromJson(dispatchDataJson);
   }
 
-  //TODO: remove complete and display amount
-  //TODO: add button logic to go to history
-  //TODO: add icon with badge
-
-  //TODO: save prefs
-  //TODO: add to shared pref
-  //TODO: add clear shared pref
   //TODO: remove time > 24 hrs current time based on time
   //TODO: Pull a list of dispatches from shared pref
 
@@ -42,9 +42,15 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
 
   @override
   void initState() {
-    readJson().then((value) {
+    DispatchList.dispatchList.clear();
+    DispatchList.counter = 0;
+    readJsonFromSharedPref().then((value) {
       setState(() {
-        _dispatch.addAll(value);
+        DispatchList.dispatchList.addAll(value);
+        DispatchList.dispatchList.forEach((element) {
+          if(element.paymentType == null || element.paymentType=='')
+            DispatchList.counter++;
+        });
       });
     });
 
@@ -60,6 +66,7 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
           height: 75,
           width: 150,
         ),
+
       ),
       body: ListView.builder(
         itemBuilder: (context, index) {
@@ -68,12 +75,12 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DispatchInfoPage(_dispatch[index])),
+                      builder: (context) => DispatchInfoPage(DispatchList.dispatchList[index])),
                 );
               },
-              child: displayCardHistory(_dispatch[index]));
+              child: displayCardHistory(DispatchList.dispatchList[index]));
         },
-        itemCount: _dispatch.length,
+        itemCount: DispatchList.dispatchList.length,
       ),
     );
   }
@@ -96,3 +103,6 @@ Widget displayCardHistory(Dispatch dispatch) {
     );
   }
 }
+
+
+
