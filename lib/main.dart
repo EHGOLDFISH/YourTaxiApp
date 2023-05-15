@@ -151,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _showDispatchBadge = DispatchList.counter > 0;
+    _showDispatchBadge = DispatchList.getIncompleteDispatchCount() > 0;
 
     return Scaffold(
       backgroundColor: primary,

@@ -20,6 +20,22 @@ class DispatchList {
   //Get Dispatch List()
   static Future<List<Dispatch>> readJsonFromSharedPref() async{
     String dispatchDataJson = prefs.getString('DispatchData')!;
+
+    DispatchList.dispatchList.forEach((element)  {
+      if(element.paymentType == null || element.paymentType=='') {
+        DispatchList.counter++;
+      }
+
+      if(element.submittedTime != null && element.submittedTime!='') {
+
+        DateTime parsedDate = DateTime.parse(element.submittedTime!);
+        DateTime timeNow = DateTime.now();
+        //check if submitted time > 24hrs
+        if(timeNow.isAfter(parsedDate.add(const Duration(hours: 24)))){
+          DispatchList.removeDispatch(element);
+        }
+      }
+    });
     return dispatchFromJson(dispatchDataJson);
   }
 
@@ -45,12 +61,18 @@ class DispatchList {
   //load sharedprefs once
   static Future<void> initSharedPref() async{
     prefs = await SharedPreferences.getInstance();
+    dispatchList = await readJsonFromSharedPref();
   }
 
   //get incomplete dispatch count
   static int getIncompleteDispatchCount(){
-
-    return 0;
+    DispatchList.counter = 0;
+    DispatchList.dispatchList.forEach((element) {
+      if (element.paymentType == null || element.paymentType == '') {
+        DispatchList.counter++;
+      }
+    });
+    return counter;
   }
 
   static Future<void> setIncompleteDispatchCount() async{

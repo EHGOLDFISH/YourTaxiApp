@@ -15,9 +15,6 @@ class DispatchHistoryPage extends StatefulWidget {
 
 class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
 
-
-  //TODO: Fix counter
-
   //TODO: hook up new google sheets
 
   //TODO: FCM page
@@ -31,25 +28,9 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
   @override
   void initState() {
     DispatchList.dispatchList.clear();
-    DispatchList.counter = 0;
     DispatchList.readJsonFromSharedPref().then((value) {
       setState(() {
-        DispatchList.dispatchList.addAll(value);
-
-        DispatchList.dispatchList.forEach((element)  {
-          if(element.paymentType == null || element.paymentType=='')
-            DispatchList.counter++;
-
-          if(element.submittedTime != null && element.submittedTime!='') {
-
-            DateTime parsedDate = DateTime.parse(element.submittedTime!);
-            DateTime timeNow = DateTime.now();
-            //check if submitted time > 24hrs
-             if(timeNow.isAfter(parsedDate.add(const Duration(hours: 1)))){
-               DispatchList.removeDispatch(element);
-             }
-          }
-        });
+        DispatchList.dispatchList.addAll(value.reversed);
       });
     });
 
