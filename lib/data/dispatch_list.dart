@@ -60,8 +60,13 @@ class DispatchList {
 
   //load sharedprefs once
   static Future<void> initSharedPref() async{
-    prefs = await SharedPreferences.getInstance();
-    dispatchList = await readJsonFromSharedPref();
+    try {
+      prefs = await SharedPreferences.getInstance();
+      dispatchList = await readJsonFromSharedPref();
+    }
+    catch(e){
+      print(e);
+    }
   }
 
   //get incomplete dispatch count

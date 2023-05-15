@@ -14,7 +14,7 @@ class UserSheetsApi{
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/your-taxi-dispatcher%40your-taxi-dispatcher.iam.gserviceaccount.com"
   }
   ''';
-  static final _spreadsheetId= '1ZBp2kyM7NXa8GG2pxGPMxNOk4YxrvD9RVJc6MEsudAs';
+  static final _spreadsheetId= '1DvI-AcxCs3KlOTZgsZzYZqyGgGtxvG2fi7VdbXQjcTQ';
   static final _gsheets = GSheets(_credentials);
   static Worksheet? _worksheet;
   static Worksheet? _FCMsheet;
@@ -28,7 +28,7 @@ class UserSheetsApi{
     _FCMsheet ??= await spreadsheet.addWorksheet('FCM Token');
 
     // insert list in row #1
-    final firstRow = ['index', 'FCM', 'Device Name'];
+    final firstRow = ['FCM', 'Device Name'];
     await _FCMsheet?.values.insertRow(1, firstRow);
   }
 
@@ -44,19 +44,19 @@ class UserSheetsApi{
     }
   }
 
-  static Future<void> addFCMToSheets(int index, String FCM,String deviceName) async{
+  static Future<void> addFCMToSheets(String FCM,String deviceName) async{
     final FCMRow = {
       'FCM': FCM,
       'Device Name': deviceName,
     };
 
     //add FCM Token list
-    _FCMsheet?.values.map.insertRowByKey(index, FCMRow);
+    _FCMsheet?.values.map.appendRow(FCMRow);
   }
 
   static Future<void> updateTenFourDispatch(int? key) async{
     final rogerRow = {
-      'roger': true,
+      '19': "YES",
     };
     await _worksheet?.values.map.insertRowByKey(key!, rogerRow);
   }
@@ -65,9 +65,9 @@ class UserSheetsApi{
 
     var datetime = DateTime.now();
     final dispatchRow = {
-      'N/F': datetime.toString(),
-      'WC': paymentType,
-      'TC': amount,
+      '6': datetime.toString(),
+      '7': paymentType,
+      '8': amount,
     };
     await _worksheet?.values.map.insertRowByKey(key!, dispatchRow);
     // await _worksheet?.values.map.appendRow(secondRow);

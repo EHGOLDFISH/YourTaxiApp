@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:your_taxi_dispatcher/api/sheets/user_sheets_api.dart';
+import 'package:your_taxi_dispatcher/data/dispatch_list.dart';
 import 'package:your_taxi_dispatcher/widget/button_widget.dart';
+
 
 final indexController = TextEditingController();
 final deviceController = TextEditingController();
@@ -28,33 +32,41 @@ class _AddFCMPageState extends State<AddFCMPage> {
             children: [
               Row(
                 children: [
-                  Container(
-                    width: 200,
-                    child: TextField (
-                      controller: indexController,
-                      keyboardType:
-                      TextInputType.number,
-                      decoration: InputDecoration(
-                          labelText: 'Index Number',
-                          hintText: 'Enter Your Index Number'
-                      ),
-                    ),
-                  ),
-                  Container( width: 300,
-                    child: TextField (
-                      controller: deviceController,
-                      decoration: InputDecoration(
-                          labelText: 'Device Name',
-                          hintText: 'Enter Your Device Name'
+                  // Container(
+                  //   width: 200,
+                  //   child: TextField (
+                  //     controller: indexController,
+                  //     keyboardType:
+                  //     TextInputType.number,
+                  //     decoration: InputDecoration(
+                  //         labelText: 'Index Number',
+                  //         hintText: 'Enter Your Index Number'
+                  //     ),
+                  //   ),
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container( width: 400,
+                      child: TextField (
+                        controller: deviceController,
+                        decoration: InputDecoration(
+                            labelText: 'Device Name',
+                            hintText: 'Enter Your Device Name'
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
-              ButtonWidget(text: 'submit FCM', onClicked: (){
-                UserSheetsApi.addFCMToSheets(int.parse(indexController.text),widget.fcmToken,deviceController.text);
+              ButtonWidget(text: 'submit FCM', onClicked: ()async{
+                DispatchList.prefs.setBool("FCM", true);
+
+                UserSheetsApi.addFCMToSheets(widget.fcmToken,deviceController.text);
                 indexController.text ='';
                 deviceController.text ='';
+                Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    "/", (r) => false);
               })
             ],
           ),

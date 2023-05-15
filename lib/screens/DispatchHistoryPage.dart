@@ -17,10 +17,7 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
 
   //TODO: hook up new google sheets
 
-  //TODO: FCM page
-  //TODO: Create one time push to sheets
-  //TODO: Save to shared pref and send to sheets
-
+  //TODO: Fix dispatch count
   //TODO: Code refactoring
 
   //TODO: test on device

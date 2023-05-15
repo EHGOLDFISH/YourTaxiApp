@@ -15,6 +15,7 @@ import 'package:your_taxi_dispatcher/theme/colors.dart';
 import 'package:badges/badges.dart' as badges;
 
 import 'data/dispatch_list.dart';
+
 //
 // @pragma('vm:entry-point')
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -35,7 +36,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 String fcmToken = '';
 
 late bool _showDispatchBadge;
-
+late bool _showWaitingPage = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +52,11 @@ void main() async {
   await UserSheetsApi.init();
   await Firebase.initializeApp();
   await DispatchList.initSharedPref();
-
+  try {
+    _showWaitingPage = DispatchList.prefs.getBool("FCM")!;
+  } catch (e) {
+    print(e);
+  }
   AwesomeNotifications().initialize('resource://drawable/ic_taxi_logo', [
     NotificationChannel(
       channelKey: 'basic_channel',
@@ -60,7 +65,7 @@ void main() async {
     )
   ]);
 
-   runApp(const MyApp());
+  runApp(const MyApp());
 }
 
 ReceivedAction? initialAction;
@@ -129,7 +134,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   initState() {
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) => {
@@ -154,34 +158,43 @@ class _MyHomePageState extends State<MyHomePage> {
     _showDispatchBadge = DispatchList.getIncompleteDispatchCount() > 0;
 
     return Scaffold(
-      backgroundColor: primary,
-      appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Image.asset('assets/yourtaxi.png',height: 75,width: 150,),
+        backgroundColor: primary,
+        appBar: AppBar(
+          title: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Image.asset(
+              'assets/yourtaxi.png',
+              height: 75,
+              width: 150,
+            ),
+          ),
+          actions: <Widget>[
+            _dispatchInfoBadge(context),
+          ],
         ),
-        actions: <Widget>[
-          _dispatchInfoBadge(context),
-        ],
-      ),
-      body:
-      //  AddFCMPage(fcmToken)
-      Center(
-        child: SafeArea(
-          child: Center(
-            child: Container(
-              width: 500.0,
-              height: 200.0,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Text("Waiting for dispatch"),
-              ),
+        body: _displayFCMorWaiting(_showWaitingPage,fcmToken));
+
+  }
+}
+
+Widget _displayFCMorWaiting(bool value, String FCMtoken) {
+  if (value) {
+    return Center(
+      child: SafeArea(
+        child: Center(
+          child: Container(
+            width: 500.0,
+            height: 200.0,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Text("Waiting for dispatch"),
             ),
           ),
         ),
       ),
-        //CompletedDispatchPage(19)
     );
+  } else {
+    return AddFCMPage(fcmToken);
   }
 }
 
@@ -189,9 +202,9 @@ Widget _dispatchInfoBadge(BuildContext context) {
   return badges.Badge(
     position: badges.BadgePosition.topEnd(top: 0, end: 3),
     badgeAnimation: badges.BadgeAnimation.slide(
-      // disappearanceFadeAnimationDuration: Duration(milliseconds: 200),
-      // curve: Curves.easeInCubic,
-    ),
+        // disappearanceFadeAnimationDuration: Duration(milliseconds: 200),
+        // curve: Curves.easeInCubic,
+        ),
     showBadge: _showDispatchBadge,
     badgeStyle: badges.BadgeStyle(
       badgeColor: Colors.red,
@@ -200,13 +213,13 @@ Widget _dispatchInfoBadge(BuildContext context) {
       DispatchList.getIncompleteDispatchCount().toString(),
       style: TextStyle(color: Colors.white),
     ),
-    child: IconButton(icon: Icon(Icons.history_outlined), onPressed: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                DispatchHistoryPage()),
-      );
-    }),
+    child: IconButton(
+        icon: Icon(Icons.history_outlined),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => DispatchHistoryPage()),
+          );
+        }),
   );
 }
