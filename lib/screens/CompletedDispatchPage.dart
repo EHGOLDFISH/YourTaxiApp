@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
-import '../api/sheets/user_sheets_api.dart';
+
 import '../data/dispatch.dart';
 import '../data/dispatch_list.dart';
 import '../theme/colors.dart';
 import '../widget/button_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 const List<String> list = <String>['Cash', 'Debit', 'BLUE'];
@@ -162,14 +161,7 @@ class CompletedDispatchPage extends StatelessWidget {
                       dispatch.paymentType = dropdown;
                       dispatch.fare = double.parse(amountWithoutDollarSign);
                       dispatch.submittedTime = DateTime.now().toString();
-                      DispatchList.dispatchList[DispatchList.dispatchList.indexWhere((element) => element.callLine == dispatch.callLine)] = dispatch;
-
-                      //update shared pref
-                      final SharedPreferences prefs = await SharedPreferences.getInstance();
-                      String dispatchListJson = json.encode(DispatchList.dispatchList);
-                      await prefs.setString('DispatchData', dispatchListJson);
-                      //send key here
-                      UserSheetsApi.updateDispatch( dispatch.callLine,dropdown, amountWithoutDollarSign);
+                      DispatchList.updateDispatch(dispatch);
                       Navigator.pushNamedAndRemoveUntil(
                           context,
                           "/", (r) => false);

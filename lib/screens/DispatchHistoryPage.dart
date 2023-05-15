@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:your_taxi_dispatcher/data/dispatch_list.dart';
 import 'package:your_taxi_dispatcher/screens/DispatchInfoPage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 import '../data/dispatch.dart';
@@ -16,19 +14,9 @@ class DispatchHistoryPage extends StatefulWidget {
 }
 
 class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
-  //List<Dispatch> _dispatch = [];
 
-  Future<List<Dispatch>> readJsonFromSharedPref() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String dispatchDataJson = prefs.getString('DispatchData')!;
 
-    //local test data
-    //String testData = await rootBundle.loadString('assets/testData.json');
-    return dispatchFromJson(dispatchDataJson);
-  }
-
-  //TODO: remove time > 24 hrs current time based on time
-  //TODO: Pull a list of dispatches from shared pref
+  //TODO: Fix counter
 
   //TODO: hook up new google sheets
 
@@ -44,12 +32,23 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
   void initState() {
     DispatchList.dispatchList.clear();
     DispatchList.counter = 0;
-    readJsonFromSharedPref().then((value) {
+    DispatchList.readJsonFromSharedPref().then((value) {
       setState(() {
         DispatchList.dispatchList.addAll(value);
-        DispatchList.dispatchList.forEach((element) {
+
+        DispatchList.dispatchList.forEach((element)  {
           if(element.paymentType == null || element.paymentType=='')
             DispatchList.counter++;
+
+          if(element.submittedTime != null && element.submittedTime!='') {
+
+            DateTime parsedDate = DateTime.parse(element.submittedTime!);
+            DateTime timeNow = DateTime.now();
+            //check if submitted time > 24hrs
+             if(timeNow.isAfter(parsedDate.add(const Duration(hours: 1)))){
+               DispatchList.removeDispatch(element);
+             }
+          }
         });
       });
     });
@@ -85,6 +84,7 @@ class _DispatchHistoryPageState extends State<DispatchHistoryPage> {
     );
   }
 }
+
 
 Widget displayCardHistory(Dispatch dispatch) {
   if (dispatch.paymentType == null || dispatch.paymentType == '') {

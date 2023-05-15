@@ -12,7 +12,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:your_taxi_dispatcher/screens/DispatchInfoPage.dart';
 import 'package:your_taxi_dispatcher/screens/NotificationPage.dart';
 import 'package:your_taxi_dispatcher/theme/colors.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:badges/badges.dart' as badges;
 
 import 'data/dispatch_list.dart';
@@ -49,10 +48,9 @@ void main() async {
   // String dispatchDataJson = prefs.getString('DispatchData')!;
   //
   // return dispatchFromJson(testData);
-
   await UserSheetsApi.init();
-
   await Firebase.initializeApp();
+  await DispatchList.initSharedPref();
 
   AwesomeNotifications().initialize('resource://drawable/ic_taxi_logo', [
     NotificationChannel(
@@ -131,8 +129,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
 
   @override
   initState() {
@@ -201,7 +197,7 @@ Widget _dispatchInfoBadge(BuildContext context) {
       badgeColor: Colors.red,
     ),
     badgeContent: Text(
-      DispatchList.counter.toString(),
+      DispatchList.getIncompleteDispatchCount().toString(),
       style: TextStyle(color: Colors.white),
     ),
     child: IconButton(icon: Icon(Icons.history_outlined), onPressed: () {
