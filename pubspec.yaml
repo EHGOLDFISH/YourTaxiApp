@@ -57,7 +57,7 @@ dev_dependencies:
   get: ^4.6.5
   gsheets: ^0.4.2
   maps_launcher: ^2.2.0
-  google_fonts: ^3.0.1
+  google_fonts: ^4.0.4
   currency_text_input_formatter: ^2.1.9
   shared_preferences: ^2.1.1
   badges: ^3.1.1
