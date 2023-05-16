@@ -57,13 +57,32 @@ void main() async {
   } catch (e) {
     print(e);
   }
+
   AwesomeNotifications().initialize('resource://drawable/ic_taxi_logo', [
     NotificationChannel(
       channelKey: 'basic_channel',
       channelName: "basic Notification",
       channelDescription: 'Notification channel for basic test',
     )
-  ]);
+  ],
+  );
+
+  await AwesomeNotificationsFcm().initialize(
+      onFcmSilentDataHandle: NotificationController.mySilentDataHandle,
+      onFcmTokenHandle: NotificationController.myFcmTokenHandle,
+      onNativeTokenHandle: NotificationController.myNativeTokenHandle,
+      licenseKeys:
+      // On this example app, the app ID / Bundle Id are different
+      // for each platform, so i used the main Bundle ID + 1 variation
+      [
+        // me.carda.awesomeNotificationsFcmExample
+        'MOpmY7Nvd9OnBASdXRFJF+sRNKnS/ERJSjyOUyMXJAf0i9S7hxu0RxWDeMbice4O5NEMQ1+nQ/h+v6MHmQsvNiBVA9KqmFtGeroPOJCw/P0DHVvc9Vpj7SBli6eFDbUflbXFnUs3ts9me16226R4QmYr9IRSYZHkKfusEGFLSeg=',
+
+        // me.carda.awesome_notifications_fcm_example
+        'UzRlt+SJ7XyVgmD1WV+7dDMaRitmKCKOivKaVsNkfAQfQfechRveuKblFnCp4'
+            'zifTPgRUGdFmJDiw1R/rfEtTIlZCBgK3Wa8MzUV4dypZZc5wQIIVsiqi0Zhaq'
+            'YtTevjLl3/wKvK8fWaEmUxdOJfFihY8FnlrSA48FW94XWIcFY=',
+      ],);
 
   runApp(const MyApp());
 }
@@ -95,6 +114,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       navigatorKey: MyApp.navigatorKey,
       title: 'Your Taxi',
       theme: ThemeData(
@@ -205,7 +225,8 @@ Widget _dispatchInfoBadge(BuildContext context) {
         // disappearanceFadeAnimationDuration: Duration(milliseconds: 200),
         // curve: Curves.easeInCubic,
         ),
-    showBadge: _showDispatchBadge,
+    //change this when working _showDispatchBadge
+    showBadge: false,
     badgeStyle: badges.BadgeStyle(
       badgeColor: Colors.red,
     ),
