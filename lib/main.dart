@@ -58,7 +58,7 @@ void main() async {
     print(e);
   }
 
-  AwesomeNotifications().initialize('resource://drawable/ic_taxi_logo', [
+  AwesomeNotifications().initialize('resource://drawable/res_ic_taxi_logo', [
     NotificationChannel(
       channelKey: 'basic_channel',
       channelName: "basic Notification",

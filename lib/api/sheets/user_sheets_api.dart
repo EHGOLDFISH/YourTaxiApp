@@ -14,7 +14,10 @@ class UserSheetsApi{
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/your-taxi-dispatcher%40your-taxi-dispatcher.iam.gserviceaccount.com"
   }
   ''';
-  static final _spreadsheetId= '1DvI-AcxCs3KlOTZgsZzYZqyGgGtxvG2fi7VdbXQjcTQ';
+
+  static final String test = '1DvI-AcxCs3KlOTZgsZzYZqyGgGtxvG2fi7VdbXQjcTQ';
+  static final String live = '1HPc9gNEZQFpRdthHgOZFpMYz7o9wrhW7SnnogF_Ov_Q';
+  static final _spreadsheetId= test;
   static final _gsheets = GSheets(_credentials);
   static Worksheet? _worksheet;
   static Worksheet? _FCMsheet;
@@ -56,7 +59,7 @@ class UserSheetsApi{
 
   static Future<void> updateTenFourDispatch(int? key) async{
     final rogerRow = {
-      '19': "YES",
+      '18': "YES",
     };
     await _worksheet?.values.map.insertRowByKey(key!, rogerRow);
   }
@@ -65,9 +68,9 @@ class UserSheetsApi{
 
     var datetime = DateTime.now();
     final dispatchRow = {
-      '6': datetime.toString(),
+      '6': amount,
       '7': paymentType,
-      '8': amount,
+      '8': datetime.toString(),
     };
     await _worksheet?.values.map.insertRowByKey(key!, dispatchRow);
     // await _worksheet?.values.map.appendRow(secondRow);
